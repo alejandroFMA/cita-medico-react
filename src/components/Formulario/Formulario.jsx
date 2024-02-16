@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import Errores from "../Errores/Errores";
 
-const Formulario = ({pacientes, setPacientes}) => {
+const Formulario = ({ pacientes, setPacientes, paciente }) => {
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setEmail] = useState("");
@@ -18,37 +19,65 @@ const Formulario = ({pacientes, setPacientes}) => {
     return () => clearTimeout(timer);
   }, [error]);
 
+
+useEffect(() => {
+  
+if(Object.keys(paciente).length>0){
+      setNombre(paciente.nombre);
+      setPropietario(paciente.propietario);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setSintomas(paciente.sintomas);
+
+}    
+  
+}, [paciente])
+
+
+const generarId =() =>{
+  const fecha = Date.now().toString(36)
+  const random = Math.random().toString(36).substring(2)
+  return random+fecha
+}
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if ([nombre, propietario, email, fecha, sintomas].includes("")) {
       console.log("Hay vacio");
       setError(true);
-
     } else {
       setError(false);
- 
-    const objetoPaciente ={
+
+      const objetoPaciente = {
         nombre,
         propietario,
         email,
         fecha,
-        sintomas
+        sintomas,
+      };
+
+      if (paciente.id){
+        objetoPaciente.id=paciente.id
+        const pacienteActualizados = pacientes.map(pacienteState => pacienteState ? objetoPaciente : pacienteState)
+        setPacientes(pacienteActualizados)
+      } else{
+        objetoPaciente.id = generarId()
+        setPacientes([...pacientes, objetoPaciente]);
       }
 
-      setPacientes([...pacientes, objetoPaciente])
-      setNombre("")
-      setPropietario("")
-      setEmail("")
-      setFecha("")
-      setSintomas("")
+      setNombre("");
+      setPropietario("");
+      setEmail("");
+      setFecha("");
+      setSintomas("");
     }
   };
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
       <h2 className="font-black text-3xl text-center mb-2">
-        Seguimiento de Pacientes
+        Formulario de Pacientes
       </h2>
       <p className="text-lg mt-5 text-center mb-5">
         {" "}
@@ -60,12 +89,10 @@ const Formulario = ({pacientes, setPacientes}) => {
         onSubmit={handleSubmit}
       >
         {error && (
-          <div>
-            <p className="bg-red-600 text-white text-center mb-2 font-bold py-2 px-5 rounded">
-              {" "}
-              Rellena todos los campos
-            </p>
-          </div>
+          <Errores>
+            {" "}
+            <p>Rellena todos los campos</p>
+          </Errores>
         )}
         <div className="mb-5">
           <label
@@ -157,7 +184,7 @@ const Formulario = ({pacientes, setPacientes}) => {
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors mb-10"
-          value="Agregar Paciente"
+          value={!paciente.id ? "Agregar Paciente": "Guardar cambios"}
         />
       </form>
     </div>
