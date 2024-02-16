@@ -1,20 +1,73 @@
-import React from "react";
+import { useState, useEffect } from "react";
 
-const Formulario = () => {
+const Formulario = ({pacientes, setPacientes}) => {
+  const [nombre, setNombre] = useState("");
+  const [propietario, setPropietario] = useState("");
+  const [email, setEmail] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [sintomas, setSintomas] = useState("");
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (error) {
+      timer = setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [error]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if ([nombre, propietario, email, fecha, sintomas].includes("")) {
+      console.log("Hay vacio");
+      setError(true);
+
+    } else {
+      setError(false);
+ 
+    const objetoPaciente ={
+        nombre,
+        propietario,
+        email,
+        fecha,
+        sintomas
+      }
+
+      setPacientes([...pacientes, objetoPaciente])
+      setNombre("")
+      setPropietario("")
+      setEmail("")
+      setFecha("")
+      setSintomas("")
+    }
+  };
+
   return (
-    <div className="w-1/2">
-      <h2 className="font-black text-3xl text-center">
+    <div className="md:w-1/2 lg:w-2/5 mx-5">
+      <h2 className="font-black text-3xl text-center mb-2">
         Seguimiento de Pacientes
       </h2>
-
-      <p className="text-lg mt-5 text-center">
+      <p className="text-lg mt-5 text-center mb-5">
         {" "}
         Añade Pacientes y {""}
         <span className="text-indigo-600 font-bold">Adminístralos</span>
       </p>
-
-      <form>
-        <div className="bg-white shadow-md rounded-lg p-5">
+      <form
+        className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
+        onSubmit={handleSubmit}
+      >
+        {error && (
+          <div>
+            <p className="bg-red-600 text-white text-center mb-2 font-bold py-2 px-5 rounded">
+              {" "}
+              Rellena todos los campos
+            </p>
+          </div>
+        )}
+        <div className="mb-5">
           <label
             htmlFor="mascota"
             className="font-bold block uppercase text-grey-700 mb-3"
@@ -22,16 +75,90 @@ const Formulario = () => {
             {" "}
             Nombre de mascota
           </label>
-
           <input
             id="mascota"
-            className="border-2  p-2 w-full placeholder-gray-400 rounded"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
             type="text"
             placeholder="Nombre de mascota"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
           />
         </div>
-        <div></div>
-        <div></div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="propietario"
+            className="font-bold block uppercase text-grey-700 mb-3"
+          >
+            {" "}
+            Nombre de Propietario
+          </label>
+          <input
+            id="propietario"
+            className="border-2  p-2 w-full placeholder-gray-400 rounded"
+            type="text"
+            placeholder="Nombre de propietario"
+            value={propietario}
+            onChange={(e) => setPropietario(e.target.value)}
+          />
+        </div>
+        <div className="mb-5">
+          <label
+            htmlFor="email"
+            className="font-bold block uppercase text-grey-700 mb-3"
+          >
+            {" "}
+            Email
+          </label>
+          <input
+            id="email"
+            className="border-2  p-2 w-full placeholder-gray-400 rounded"
+            type="email"
+            placeholder="example@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="date"
+            className="font-bold block uppercase text-grey-700 mb-3"
+          >
+            {" "}
+            Alta
+          </label>
+          <input
+            id="alta"
+            className="border-2  p-2 w-full placeholder-gray-400 rounded"
+            type="date"
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
+          />
+        </div>
+        <div className="mb-5">
+          <label
+            htmlFor="sintomas"
+            className="font-bold block uppercase text-grey-700 mb-3"
+          >
+            {" "}
+            Síntomas
+          </label>
+          <textarea
+            id="alta"
+            className="border-2  p-2 w-full placeholder-gray-400 rounded"
+            type="text-area"
+            placeholder="Descripción de los síntomas"
+            value={sintomas}
+            onChange={(e) => setSintomas(e.target.value)}
+          />
+        </div>
+
+        <input
+          type="submit"
+          className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors mb-10"
+          value="Agregar Paciente"
+        />
       </form>
     </div>
   );
