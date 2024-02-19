@@ -9,14 +9,9 @@ function App() {
   const [paciente, setPaciente] = useState({});
 
   useEffect(() => {
-    const obtenerLS = async () => {
-      try {
-        const pacientesLS = await JSON.parse(localStorage.getItem('pacientes')) ?? [];
+    const obtenerLS =  () => {
+        const pacientesLS =  JSON.parse(localStorage.getItem('pacientes')) ?? [];
         setPacientes(pacientesLS);
-      } catch (error) {
-        console.error('Error al obtener pacientes de localStorage:', error.message);
-      }
-
     }
     obtenerLS();
   }, []);
