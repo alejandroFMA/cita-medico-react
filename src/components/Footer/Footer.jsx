@@ -9,7 +9,7 @@ const Footer = () => {
           Realizado por{" "}
           <a
             href="https://github.com/alejandroFMA"
-            className="font-bold text-indigo-600 hover:text-indigo-800"
+            className="font-bold text-indigo-500 hover:text-indigo-700"
             target="_blank"
           >
             Alejandro Márquez
