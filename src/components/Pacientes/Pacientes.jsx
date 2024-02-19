@@ -1,8 +1,17 @@
 import React from "react";
 
-const Pacientes = ({paciente, setPaciente}) => {
+const Pacientes = ({paciente, setPaciente, deletePaciente}) => {
 
-  const {nombre, propietario, email, fecha, sintomas} = paciente
+  const {nombre, propietario, email, fecha, sintomas, id} = paciente
+
+  const handleEliminar = () => {
+    const respuesta = confirm("¿Deseas eliminar este paciente?")
+
+    if(respuesta){
+      deletePaciente(id)
+    }
+
+  }
 
   return <>
   <div className="bg-white shadow-md mx-5 my-3 p-5 rounded-xl">
@@ -34,7 +43,8 @@ const Pacientes = ({paciente, setPaciente}) => {
   <div className="flex justify-between">
     <button type="button" className="bg-indigo-600 mt-10 py-2 px-10 hover:bg-indigo-700 text-white font-bold uppercase rounded-md"
     onClick={()=> setPaciente(paciente)}>Editar</button>
-    <button type="button" className="bg-red-600 mt-10 py-2 px-3 hover:bg-red-700 text-white font-bold uppercase rounded-md">Borrar</button>
+    <button type="button" onClick={handleEliminar}
+    className="bg-red-600 mt-10 py-2 px-3 hover:bg-red-700 text-white font-bold uppercase rounded-md">Borrar</button>
   </div>
 </div>
 </>
