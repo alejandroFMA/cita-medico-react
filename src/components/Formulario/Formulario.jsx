@@ -22,14 +22,14 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
 
 useEffect(() => {
   
-if(Object.keys(paciente).length>0){
-      setNombre(paciente.nombre);
-      setPropietario(paciente.propietario);
-      setEmail(paciente.email);
-      setFecha(paciente.fecha);
-      setSintomas(paciente.sintomas);
+  if(Object.keys(paciente).length>0){
+        setNombre(paciente.nombre);
+        setPropietario(paciente.propietario);
+        setEmail(paciente.email);
+        setFecha(paciente.fecha);
+        setSintomas(paciente.sintomas);
 
-}    
+  }    
   
 }, [paciente])
 
@@ -54,19 +54,20 @@ const generarId =() =>{
         propietario,
         email,
         fecha,
-        sintomas,
+        sintomas
       };
 
-      if (paciente.id){
-        objetoPaciente.id=paciente.id
-        const pacienteActualizados = pacientes.map(pacienteState => pacienteState ? objetoPaciente : pacienteState)
-        setPacientes(pacienteActualizados);
-        setPaciente({});
-      } else{
-        objetoPaciente.id = generarId()
+      if(paciente.id) {
+        objetoPaciente.id = paciente.id
+        const pacientesActualizados = pacientes.map( pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState )
+
+        setPacientes(pacientesActualizados)
+        setPaciente({})
+
+    } else {
+        objetoPaciente.id = generarId();
         setPacientes([...pacientes, objetoPaciente]);
-       
-      }
+    }
 
       setNombre("");
       setPropietario("");
